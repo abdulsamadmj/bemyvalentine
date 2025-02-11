@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.heart-button {
+    position: relative;
+    width: 100px;
+    height: 90px;
+    background-color: red;
+    transform: rotate(-45deg);
+    cursor: pointer;
+    border: none;
+}
+
+.heart-button:before,
+.heart-button:after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 90px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+.heart-button:before {
+    top: -50px;
+    left: 0;
+}
+
+.heart-button:after {
+    top: 0;
+    left: 50px;
+}
