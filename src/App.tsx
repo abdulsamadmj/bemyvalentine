@@ -66,7 +66,7 @@ const InitialChoice = ({
   onNoClick,
   onYesClick,
 }: {
-  catPerson: boolean;
+  catPerson: boolean | null;
   yesScale: number;
   onNoClick: () => void;
   onYesClick: () => void;
@@ -132,8 +132,8 @@ const DatePicker = ({
 // The Confirmation component now sends an email via MailerSend and also shows a “create your link” button.
 const Confirmation = ({
   selectedDate,
-  // formRecord,
-}: {
+}: // formRecord,
+{
   selectedDate: string;
   formRecord: { email: string; name: string };
 }) => {
@@ -230,15 +230,20 @@ function App() {
   // State for the invitation flow (unchanged parts)
   const [yesScale, setYesScale] = useState(1);
   const [selectedDate, setSelectedDate] = useState("");
-  const [catPerson] = useState(false);
+  const [catPerson, setCatPerson] = useState(null);
 
-  const gifSrc = catPerson
-    ? selectedDate
-      ? catJumping
-      : catPlease
-    : selectedDate
-    ? dogJumping
-    : dogPlease;
+  const gifSrc: string =
+    catPerson === null
+      ? selectedDate
+        ? [catJumping, dogJumping].at(Math.random()) ?? catJumping
+        : [catPlease, dogPlease].at(Math.random()) ?? dogPlease
+      : catPerson
+      ? selectedDate
+        ? catJumping
+        : catPlease
+      : selectedDate
+      ? dogJumping
+      : dogPlease;
 
   const [gif, setGif] = useState(gifSrc);
 
@@ -255,6 +260,7 @@ function App() {
         .eq("id", formId)
         .single()
         .then(({ data, error }) => {
+          setCatPerson(data.catPerson);
           if (error || !data) {
             setFormRecord(null);
           } else {
