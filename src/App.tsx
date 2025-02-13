@@ -20,6 +20,7 @@ import dogPlease from "./assets/dog-please.gif";
 import dogSad from "./assets/dog-sad.gif";
 import CreateForm from "./form/createForm";
 import { supabase } from "./utils/supabaseClient";
+import { toast } from "react-toastify";
 
 // ---- Your common Layout component ----
 const Layout = ({
@@ -137,51 +138,11 @@ const Confirmation = ({
   selectedDate: string;
   formRecord: { email: string; name: string };
 }) => {
-  // const [emailSent, setEmailSent] = useState(false);
-
-  // useEffect(() => {
-  //   // Send the email once when the selected date is available
-  //   if (selectedDate && !emailSent) {
-  //     // TODO: migrate this to server/less (CORS issue)
-  //     const sendEmail = async () => {
-  //       try {
-  //         const mailerSendApiKey = import.meta.env
-  //           .VITE_MAILERSEND_API_KEY as string;
-  //         const body = {
-  //           from: { email: "sender@example.com", name: "Valentine App" },
-  //           to: [{ email: formRecord.email, name: formRecord.name }],
-  //           subject: "Your Valentine Accepted the Invitation!",
-  //           text: `Good news – your valentine accepted! The date is set for ${new Date(
-  //             selectedDate
-  //           ).toLocaleString()}.`,
-  //         };
-
-  //         const response = await fetch("https://api.mailersend.com/v1/email", {
-  //           method: "POST",
-  //           headers: {
-  //             Authorization: `Bearer ${mailerSendApiKey}`,
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify(body),
-  //         });
-
-  //         if (response.ok) {
-  //           setEmailSent(true);
-  //         } else {
-  //           console.error("Failed to send email:", await response.text());
-  //         }
-  //       } catch (err) {
-  //         console.error("Error sending email:", err);
-  //       }
-  //     };
-  //     sendEmail();
-  //   }
-  // }, [selectedDate, emailSent, formRecord]);
 
   return (
     <div className="text-center animate-fade-in space-y-4">
       <p className="text-2xl font-bold text-pink-600 mb-2">
-        Can't wait for our Valentine's date! ❤️
+        Can't wait for our date! ❤️
       </p>
       <p className="text-lg text-gray-700">
         See you on{" "}
@@ -312,8 +273,20 @@ function App() {
     }, 3000);
   }, [navigate]);
 
-  const handleDateConfirm = () => {
+  const handleDateConfirm = async () => {
     if (selectedDate) {
+      // Update the form record with the selected date
+      const { error } = await supabase
+        .from("forms")
+        .update({ response: selectedDate })
+        .eq("id", formId);
+
+      if (error) {
+        console.error("Error updating date:", error);
+        toast.error("Error Updating date:" + error);
+        return;
+      }
+
       navigate("/see-ya?id=" + formId);
     }
   };
