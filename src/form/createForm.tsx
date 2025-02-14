@@ -41,6 +41,20 @@ const CreateForm = () => {
     toast.success("Copied to Clipboard");
   };
 
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Your Form Link',
+        text: 'Check out this form link:',
+        url: affiliateLink,
+      })
+      .then(() => console.log('Successful share'))
+      .catch((error) => console.log('Error sharing', error));
+    } else {
+      toast.error("Web Share API is not supported in your browser.");
+    }
+  };
+
   return (
     <div className="space-y-6">
       <ToastContainer />
@@ -72,6 +86,24 @@ const CreateForm = () => {
               >
                 <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
                 <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+              </svg>
+            </button>
+            <button onClick={handleShare}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-square-arrow-out-up-right"
+              >
+                <path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6" />
+                <path d="m21 3-9 9" />
+                <path d="M15 3h6v6" />
               </svg>
             </button>
           </div>
