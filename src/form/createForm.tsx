@@ -44,8 +44,8 @@ const CreateForm = () => {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: 'Your Form Link',
-        text: 'Check out this form link:',
+        title: 'Be My Valentine ?',
+        text: 'Would you be my Valentine?',
         url: affiliateLink,
       })
       .then(() => console.log('Successful share'))
