@@ -26,9 +26,11 @@ import { toast } from "react-toastify";
 const Layout = ({
   children,
   gif,
+  name,
 }: {
   children: React.ReactNode;
   gif: string;
+  name?: string;
 }) => (
   <div className="min-h-screen bg-gradient-to-br from-pink-100 to-red-50 flex items-center justify-center p-4">
     {/* Animated hearts */}
@@ -46,7 +48,7 @@ const Layout = ({
     </div>
     <div className="max-w-md w-full bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl">
       <h1 className="text-3xl md:text-4xl font-bold text-center text-pink-600 mb-6">
-        Will you be my Valentine? 💝
+        Hey{name && " " + name}, Will you be my Valentine? 💝
       </h1>
       <div className="w-full aspect-square mb-8 rounded-lg overflow-hidden">
         <img
@@ -138,7 +140,6 @@ const Confirmation = ({
   selectedDate: string;
   formRecord: { email: string; name: string };
 }) => {
-
   return (
     <div className="text-center animate-fade-in space-y-4">
       <p className="text-2xl font-bold text-pink-600 mb-2">
@@ -317,7 +318,7 @@ function App() {
 
   // Otherwise, show the invitation flow routes.
   return (
-    <Layout gif={gif}>
+    <Layout gif={gif} name={formRecord?.name}>
       <Routes>
         <Route
           path="/"
