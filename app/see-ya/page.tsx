@@ -1,11 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 import { useValentine } from '../context/ValentineContext';
 
-export default function SeeYa() {
+// Loading component
+function Loading() {
+  return (
+    <Layout gif="/assets/cat.gif">
+      <div className="text-center">Loading...</div>
+    </Layout>
+  );
+}
+
+// Main component
+function SeeYaContent() {
   const { formRecord, selectedDate, loading, getGifSrc } = useValentine();
   const [gifSrc, setGifSrc] = useState('/assets/cat.gif');
 
@@ -47,5 +57,14 @@ export default function SeeYa() {
         </Link>
       </div>
     </Layout>
+  );
+}
+
+// Wrap with Suspense
+export default function SeeYa() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <SeeYaContent />
+    </Suspense>
   );
 } 

@@ -1,12 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Layout from './components/Layout';
 import { useValentine } from './context/ValentineContext';
 import Link from 'next/link';
 
-export default function Home() {
+// Loading component
+function Loading() {
+  return (
+    <Layout gif="/assets/cat-please.gif">
+      <div className="text-center">Loading...</div>
+    </Layout>
+  );
+}
+
+// Main page content
+function HomeContent() {
   const router = useRouter();
   const { formId, formRecord, yesScale, setYesScale, loading, getGifSrc } = useValentine();
   const [gifSrc, setGifSrc] = useState('/assets/cat-please.gif');
@@ -87,5 +97,14 @@ export default function Home() {
         </button>
       </div>
     </Layout>
+  );
+}
+
+// Wrap the component with Suspense
+export default function Home() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <HomeContent />
+    </Suspense>
   );
 }

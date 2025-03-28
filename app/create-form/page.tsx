@@ -1,10 +1,20 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
 
-export default function CreateForm() {
+// Simple loading component
+function Loading() {
+  return (
+    <Layout gif="/assets/cat-please.gif">
+      <div className="text-center">Loading...</div>
+    </Layout>
+  );
+}
+
+// Main component
+function CreateFormContent() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [catPerson, setCatPerson] = useState<boolean | null>(null);
@@ -196,5 +206,14 @@ export default function CreateForm() {
         )}
       </div>
     </Layout>
+  );
+}
+
+// Wrap the component with Suspense
+export default function CreateForm() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <CreateFormContent />
+    </Suspense>
   );
 } 

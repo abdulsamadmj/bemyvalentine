@@ -1,12 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
 import { useValentine } from '../context/ValentineContext';
 
-export default function DatePicker() {
+// Loading component
+function Loading() {
+  return (
+    <Layout gif="/assets/cat.gif">
+      <div className="text-center">Loading...</div>
+    </Layout>
+  );
+}
+
+// Main component
+function DatePickerContent() {
   const router = useRouter();
   const { formId, formRecord, selectedDate, setSelectedDate, updateFormRecord, loading, getGifSrc } = useValentine();
   const [gifSrc, setGifSrc] = useState('/assets/cat.gif');
@@ -57,5 +67,14 @@ export default function DatePicker() {
         </button>
       </div>
     </Layout>
+  );
+}
+
+// Wrap with Suspense
+export default function DatePicker() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <DatePickerContent />
+    </Suspense>
   );
 } 

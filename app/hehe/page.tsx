@@ -1,12 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import confetti from 'canvas-confetti';
 import Layout from '../components/Layout';
 import { useValentine } from '../context/ValentineContext';
 
-export default function ThankYou() {
+// Loading component
+function Loading() {
+  return (
+    <Layout gif="/assets/cat.gif">
+      <div className="text-center">Loading...</div>
+    </Layout>
+  );
+}
+
+// Main component
+function ThankYouContent() {
   const router = useRouter();
   const { formId, loading, getGifSrc } = useValentine();
   const [gifSrc, setGifSrc] = useState('/assets/cat.gif');
@@ -64,5 +74,14 @@ export default function ThankYou() {
         </p>
       </div>
     </Layout>
+  );
+}
+
+// Wrap with Suspense
+export default function ThankYou() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ThankYouContent />
+    </Suspense>
   );
 } 
